@@ -1,1 +1,1 @@
-nøkur ting sum er sindur shit:
+//nøkur ting sum er sindur shit:

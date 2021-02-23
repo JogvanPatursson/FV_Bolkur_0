@@ -1,11 +1,22 @@
-import React, { useState } from 'react';
-import TextureComponent from './TextureComponent';
+import Collision from './Collision';
+import EntityList from './EntityList';
 
-function Entity(aX = 0, aY = 0) {
-    const [x, setX] = useState(aX);
-    const [y, setY] = useState(aY);
+// Class for all game entities
+class Entity{
+    // Class members
+    // Collision object
+    private collisionObject : Collision;
 
-    
+    // Class constructor
+    constructor(collisionObject : Collision){
+        this.collisionObject = collisionObject;
+    }
+
+    // Class methods
+    public getCollisionObject() {
+        return this.collisionObject;
+    }
+
 }
-
-export default Entity;
+    
+    export default Entity;
