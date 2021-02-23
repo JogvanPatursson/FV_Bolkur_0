@@ -2,7 +2,7 @@
     PHYSICS CLASS CREATED FOR THE GAME OF LIFE ENGINE
 */
 
-import MathVector from '../GameEngine/MathVector'
+import MathVector from './MathVector'
 
 export default class PhysicsComponent {
     private position : MathVector;
