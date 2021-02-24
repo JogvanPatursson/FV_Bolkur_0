@@ -12,6 +12,10 @@ class EntityList{
         this.Entities.push(entity);
     }
 
+    public length() : number {
+        return this.Entities.length;
+    }
+
     public getFirstArrayItem() {
         return this.Entities.pop();
     }

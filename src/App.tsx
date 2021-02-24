@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import TheBird from '../src/FlappyBird/TheBird';
-
+import Game from './FlappyBird/Game';
 
 const App: React.FC = () => {
   
-    return TheBird();
+    return Game();
 
 };
 
