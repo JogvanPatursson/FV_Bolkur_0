@@ -15,8 +15,12 @@ class Entity{
         this.spriteLocation = spriteLocation;
     }
 
-    public render() {
+    public update() {
         this.physicsObject.update();
+    }
+
+    public render() {
+        this.update();
         const tmpX = this.physicsObject.getX();
         const tmpY = this.physicsObject.getY();
         const tmpWidth = this.physicsObject.getCollisionObject().getWidth();

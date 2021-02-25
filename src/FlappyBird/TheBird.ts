@@ -11,6 +11,10 @@ class TheBird {
         this.entity.getPhysicsObject().setHspeed(200);
     }
 
+    update() {
+        this.entity.update();
+    }
+
     render() {
         return this.entity.render();
     }

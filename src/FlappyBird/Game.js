@@ -6,7 +6,6 @@ import TheBird from './TheBird'
   
 function Game() {
 
-    
     const [time, setTime] = useState(0);
     const [deltaTime, setDeltaTime] = useState(0);
     const [fps, setFPS] = useState(0);
@@ -19,6 +18,7 @@ function Game() {
         setTime(time);
         setDeltaTime(deltaTime);
         setFPS(Math.floor(fps));
+        bird.update();
     });
 
 
