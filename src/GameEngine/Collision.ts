@@ -55,9 +55,6 @@ class Collision{
     public checkBoxCollision() : Entity | null {
 
         this.entityList.getArray().forEach( (entity) => {
-            let obj : Entity;
-            obj = entity;
-            console.log(obj.getT());
             /*
             let xTemp = entity.getPhysicsObject().getCollisionObject().getX();
             let yTemp = entity.getPhysicsObject().getCollisionObject().getY();

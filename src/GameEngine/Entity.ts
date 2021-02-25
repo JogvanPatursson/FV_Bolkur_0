@@ -29,10 +29,6 @@ class Entity{
     public getPhysicsObject() : PhysicsComponent {
         return this.physicsObject;
     }
-    
-    public getT() : string {
-        return "t";
-    }
 
 }
     
