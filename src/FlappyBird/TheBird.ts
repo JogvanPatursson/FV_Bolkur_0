@@ -11,7 +11,9 @@ class TheBird {
     }
 
     update() {
-        this.entity.getPhysicsObject().setHspeed(1);
+        this.entity.getPhysicsObject().setHspeed(2);
+        this.entity.getPhysicsObject().setGravity(0.1);
+
         this.entity.getPhysicsObject().setGravityDirection(270)
         this.entity.update();
     }
