@@ -1,27 +1,30 @@
+import { render } from '@testing-library/react';
 import  { useState } from 'react'; 
 import { inherits } from 'util';
 import EntityList from '../GameEngine/EntityList';
-import { UseFrameLoop } from '../GameEngine/FrameLoop';
+import { Timer } from '../GameEngine/Timer';
 import TheBird from './TheBird'
+
+// Constants
+
+const SCREENWIDTH = 400;
+const SCREENHEIGHT = 600;
+
+
 
 const entityList = new EntityList();
 const bird = new TheBird(entityList);
 const bird1 = new TheBird(entityList);
-let bird1isColliding = false;
-bird.entity.getPhysicsObject().setX(49);
+bird.entity.getPhysicsObject().setX(200);
 bird1.entity.getPhysicsObject().setX(0);
 
 window.requestAnimationFrame(gameLoop);
 
 function gameLoop() {
-    
-    bird1.entity.getPhysicsObject().setHspeed(0);
-    if(bird1.entity.getPhysicsObject().getCollisionObject().checkBoxCollision(entityList, bird1.entity) != null) {
-        bird1isColliding = true;
+    if(bird1.entity.getPhysicsObject().getX() + bird1.entity.getPhysicsObject().getCollisionObject().getWidth() > SCREENWIDTH) {
+        bird1.entity.getPhysicsObject().setX(0);
     }
-    else {
-        bird1isColliding = false;
-    }
+    bird1.entity.getPhysicsObject().setHspeed(1);
     bird.update();
     bird1.update();
     window.requestAnimationFrame(gameLoop);
@@ -32,36 +35,42 @@ function Game() {
     const [deltaTime, setDeltaTime] = useState(0);
     const [fps, setFPS] = useState(0);
 
-    UseFrameLoop((time, deltaTime, fps)=>{
+
+    Timer((time, deltaTime, fps)=>{
         setTime(time);
         setDeltaTime(deltaTime);
         setFPS(Math.floor(fps));
-        bird.update();
     });
-
     
 
     return(
-        <div className= "GameLoop">
+        <div className= "gameLoop" 
+            style= 
+            {{
+                backgroundColor: `#00f1f1`, 
+                position: `absolute`, 
+                top:`100px`, 
+                left:`100px`,
+                width:`${SCREENWIDTH}px`,
+                height:`${SCREENHEIGHT}px`}}>
             <div className = "Background">
+
 
             </div>
             
             <div className = "GameElements">
                 {bird.getEntity().getPhysicsObject().getX()}
                 <br></br>
-                {bird1isColliding? "YES":"NO"}
+                {bird1.entity.CollidesWith(entityList, bird)? "NO":"YES"}
+                <br></br>
+                {bird1.render()}
                 {bird.render()}
             </div>
-            <div className = "GameElements">
-                {bird1.getEntity().getPhysicsObject().getX()}
-                {bird1.render()}
-            </div>
 
-            <div className = "Hud">
-                <p>Seconds: {time}</p>
-                <p>Delat time: {deltaTime}</p>
-                <p>fps {fps}</p>
+            <div className = "Hud" style = {{position:`absolute`, left: `10px`, top: `10px`, backgroundColor: 'lightGray'}}>
+                Seconds: {Math.floor(time / 1000)}<br/>
+                Delta time: {Math.floor(deltaTime)}<br/>
+                fps {Math.floor(fps)}<br/>
             </div>
         
         </div>

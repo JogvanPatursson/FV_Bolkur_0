@@ -40,6 +40,16 @@ class Entity {
         return this.id;
     }
 
+    /**
+     * CollidesWith checks if two entities collides with each other
+     */
+    public CollidesWith(entityList: EntityList, entity: Entity) {
+        if(this.getPhysicsObject().getCollisionObject().checkBoxCollision(entityList, entity)?.getID == this.getID){
+            return true;
+        }
+        return false;
+    }
+
 }
     
 export default Entity;

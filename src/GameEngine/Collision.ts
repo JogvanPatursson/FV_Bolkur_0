@@ -58,52 +58,21 @@ class Collision{
                 let yTemp = entityList.getEntity(i).getPhysicsObject().getCollisionObject().getY();
                 let widthTemp = entityList.getEntity(i).getPhysicsObject().getCollisionObject().getWidth();
                 let heightTemp = entityList.getEntity(i).getPhysicsObject().getCollisionObject().getHeight();
-                console.log("list id = " + entityList.getEntity(i).getID + ", entity id = " + entity.getID);
 
-                
-                
-    
                 if(( this.x < xTemp + widthTemp ) &&
                     ( this.x + this.width > xTemp ) &&
                     ( this.y < yTemp + heightTemp ) &&
                     ( this.y + this.height > yTemp )) {
-                        console.log("x" + xTemp + ", y" + yTemp + ", width" + widthTemp + ", height" + heightTemp);
-                        
+
                     // Collision detected
-                    console.log("SD");
                     return entityList.getEntity(i);
                 }
             }
-
         }
 
         // No collision detected
         return null;
     }
-
-    // Checks collision of point with box
-    // Returns null if no collision was found, else it returns the entity that lies within the point.
-    public checkPointCollision(x : number, y : number) : Entity | null {
-        // this.entityList.getArray().forEach( (entity) => {
-        //     let xTemp = entity.getPhysicsObject().getCollisionObject().getX();
-        //     let yTemp = entity.getPhysicsObject().getCollisionObject().getY();
-        //     let widthTemp = entity.getPhysicsObject().getCollisionObject().getWidth();
-        //     let heightTemp = entity.getPhysicsObject().getCollisionObject().getHeight();
-
-        //     if((x < xTemp + widthTemp) &&
-        //         (x > xTemp) &&
-        //         (y < yTemp + heightTemp) &&
-        //         (y > yTemp)) {
-
-        //         // Collision detected
-        //         return entity;
-        //     }
-        // })
-
-        // No collision detected
-        return null;
-    }
-
 }
 
 
