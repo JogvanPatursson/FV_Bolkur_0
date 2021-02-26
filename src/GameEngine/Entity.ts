@@ -20,11 +20,11 @@ class Entity{
     }
 
     public render() {
-        this.update();
         const tmpX = this.physicsObject.getX();
         const tmpY = this.physicsObject.getY();
         const tmpWidth = this.physicsObject.getCollisionObject().getWidth();
         const tmpHeight = this.physicsObject.getCollisionObject().getHeight();
+        console.log(tmpX);
 
         return TextureComponent(this.spriteLocation, tmpX, tmpY, tmpWidth, tmpHeight);
     }

@@ -3,24 +3,31 @@ import { inherits } from 'util';
 import EntityList from '../GameEngine/EntityList';
 import { UseFrameLoop } from '../GameEngine/FrameLoop';
 import TheBird from './TheBird'
-  
-function Game() {
 
+const entityList = new EntityList();
+const bird = new TheBird(entityList);
+entityList.pushArray(bird);
+
+window.requestAnimationFrame(gameLoop);
+
+function gameLoop() {
+    bird.update();
+    window.requestAnimationFrame(gameLoop);
+}
+
+function Game() {
     const [time, setTime] = useState(0);
     const [deltaTime, setDeltaTime] = useState(0);
     const [fps, setFPS] = useState(0);
-    const entityList = new EntityList();
-    const bird = new TheBird(entityList);
 
-    entityList.pushArray(bird);
 
     UseFrameLoop((time, deltaTime, fps)=>{
         setTime(time);
         setDeltaTime(deltaTime);
         setFPS(Math.floor(fps));
-        bird.update();
     });
 
+    
 
     return(
         <div className= "GameLoop">
@@ -29,6 +36,7 @@ function Game() {
             </div>
             
             <div className = "GameElements">
+                {bird.getEntity().getPhysicsObject().getX()}
                 {bird.render()}
             </div>
 
@@ -41,5 +49,6 @@ function Game() {
         </div>
     )
 }
+
 
 export default Game;
