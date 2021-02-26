@@ -30,7 +30,6 @@ function Game() {
             </div>
             
             <div className = "GameElements">
-                {bird.getEntity().getPhysicsObject().getX()}
                 {bird.render()}
             </div>
 
