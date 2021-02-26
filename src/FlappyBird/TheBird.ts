@@ -7,13 +7,17 @@ class TheBird {
     entity : Entity;
     
     constructor(entityList : EntityList) {
-        this.entity = new Entity(entityList, FlappyBird, 0, 100, 50, 50);
+        
+        this.entity = new Entity(entityList.length(), FlappyBird, 0, 100, 50, 50);
+        entityList.pushArray(this.entity);
     }
 
     update() {
+
+        //this.entity.getPhysicsObject().setHspeed(0);
+
         this.entity.getPhysicsObject().setHspeed(2);
         this.entity.getPhysicsObject().setGravity(0.1);
-
         this.entity.getPhysicsObject().setGravityDirection(270)
         this.entity.update();
     }
