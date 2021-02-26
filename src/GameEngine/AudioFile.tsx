@@ -38,10 +38,16 @@ export default class AudioFile {
         }
     }
 
-
+    // member functions
+    
     // for playing the audio
-    public playAudio() : any {
+    public playAudio() : void {
         this.sound.play()
-        console.log("Playing audio!");
+        //console.log("Playing audio!");
+    }
+
+    // for looping the audio
+    public loopAudio() : void{
+        this.sound.loop = true;
     }
 }
