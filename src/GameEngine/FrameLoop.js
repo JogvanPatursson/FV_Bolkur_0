@@ -8,7 +8,9 @@ export const UseFrameLoop = (callback) => {
 const loop = time => {
     if(previousTime.current !== undefined) {
         const deltaTime = time - previousTime.current;
-        callback(time, deltaTime);
+        const fps = 1000 / deltaTime;
+
+        callback(time, deltaTime, fps);
     }
 
     previousTime.current = time;
@@ -18,7 +20,6 @@ const loop = time => {
 useEffect(()=>{
     requestID.current = requestAnimationFrame(loop);
     return ()=> cancelAnimationFrame(requestID.current);
-// eslint-disable-next-line react-hooks/exhaustive-deps
 }, []);
 
 

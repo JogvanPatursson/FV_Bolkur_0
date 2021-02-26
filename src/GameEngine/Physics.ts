@@ -2,9 +2,13 @@
     PHYSICS CLASS CREATED FOR THE GAME OF LIFE ENGINE
 */
 
+import Collision from './Collision';
+import EntityList from './EntityList';
 import MathVector from './MathVector'
 
 export default class PhysicsComponent {
+    private collisionObject : Collision;
+    private solid : boolean;
     private position : MathVector;
     private vspeed : number;
     private hspeed : number;
@@ -12,7 +16,9 @@ export default class PhysicsComponent {
     private gravityDirection : number;
     private currentGravity : MathVector;
 
-    constructor(x = 0, y = 0) {
+    constructor(entityList : EntityList, x = 0, y = 0, width = 0, height = 0) {
+        this.collisionObject = new Collision(entityList, x, y, width, height);
+        this.solid = false;
         this.position = new MathVector(x, y);
         this.vspeed = 0;
         this.hspeed = 0;
@@ -47,6 +53,14 @@ export default class PhysicsComponent {
 
     public getGravityDirection() : number {
         return this.gravityDirection;
+    }
+
+    public getSolid() : boolean {
+        return this.solid;
+    }
+
+    public getCollisionObject() : Collision {
+        return this.collisionObject;
     }
 
     // **************************************************************************************************************************
@@ -101,6 +115,14 @@ export default class PhysicsComponent {
         this.gravityDirection = direction;
     }
 
+    /*
+        setSolid
+        if the object is set to solid then other objects can't pass through it
+    */
+    public setSolid(solid : true) {
+        this.solid = solid;
+    }
+
     // **************************************************************************************************************************
     // PUBLIC METHODS
     // **************************************************************************************************************************
@@ -116,7 +138,12 @@ export default class PhysicsComponent {
         // Vspeed
         this.applyDirectionalForce(this.getGravityDirection(), this.getVspeed());
 
+        // Gravity
         this.updateGravity();
+        
+        // Update collision mask
+        this.collisionObject.setX(this.getX());
+        this.collisionObject.setY(this.getY());
     }
 
     /*
@@ -168,8 +195,46 @@ export default class PhysicsComponent {
     }
 
     private moveToFreeSpace(vec : MathVector) {
-        // if solid then vector to last free space.
+
         this.position.add(vec);
+        
+        // Check if any collision has accured in the movement
+        const tmpEntity = this.collisionObject.checkBoxCollision();
+
+        // Check if the entity is solid then we need to revert back to the last free space
+        if (tmpEntity != null) {
+            if (tmpEntity.getPhysicsObject().getSolid() == true) {
+                
+                // Create a revert vector that backtracks the route until it finds a free space
+                const revertVec = new MathVector(0, 0);
+                revertVec.subtract(vec);
+                revertVec.normalize();
+
+                // Backtrack  the route until a space with no collision is found
+                for (let i = 0; i < vec.length(); i++) {
+                    this.position.add(revertVec);
+
+
+                    // Check if any collision has accured in the movement
+                    const tmpEntity = this.collisionObject.checkBoxCollision();
+
+                    // Break the loop when a free space is found
+                    if (tmpEntity == null) {
+                        break;  // Array return null thus the space is free
+                    }
+                    else
+                    {
+                        if (tmpEntity.getPhysicsObject().getSolid() == false) {
+                            break;
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+
     }
 
 }
