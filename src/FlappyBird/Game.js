@@ -36,6 +36,7 @@ function Game() {
         setTime(time);
         setDeltaTime(deltaTime);
         setFPS(Math.floor(fps));
+        bird.update();
     });
 
     
