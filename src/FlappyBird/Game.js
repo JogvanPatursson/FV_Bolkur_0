@@ -8,13 +8,6 @@ const entityList = new EntityList();
 const bird = new TheBird(entityList);
 entityList.pushArray(bird);
 
-window.requestAnimationFrame(gameLoop);
-
-function gameLoop() {
-    bird.update();
-    window.requestAnimationFrame(gameLoop);
-}
-
 function Game() {
     const [time, setTime] = useState(0);
     const [deltaTime, setDeltaTime] = useState(0);
@@ -25,6 +18,7 @@ function Game() {
         setTime(time);
         setDeltaTime(deltaTime);
         setFPS(Math.floor(fps));
+        bird.update();
     });
 
     
