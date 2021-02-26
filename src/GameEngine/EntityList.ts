@@ -23,6 +23,9 @@ class EntityList{
     public getArray() : Entity[] {
         return this.Entities;
     }
+    public getEntity(index : number) {
+        return this.Entities[index];
+    }
 }
 
 export default EntityList;

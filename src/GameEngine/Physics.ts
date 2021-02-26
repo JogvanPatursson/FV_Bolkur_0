@@ -16,8 +16,8 @@ export default class PhysicsComponent {
     private gravityDirection : number;
     private currentGravity : MathVector;
 
-    constructor(entityList : EntityList, x = 0, y = 0, width = 0, height = 0) {
-        this.collisionObject = new Collision(entityList, x, y, width, height);
+    constructor(x = 0, y = 0, width = 0, height = 0) {
+        this.collisionObject = new Collision(x, y, width, height);
         this.solid = false;
         this.position = new MathVector(x, y);
         this.vspeed = 0;
@@ -199,40 +199,40 @@ export default class PhysicsComponent {
         this.position.add(vec);
         
         // Check if any collision has accured in the movement
-        const tmpEntity = this.collisionObject.checkBoxCollision();
+        // const tmpEntity = this.collisionObject.checkBoxCollision();
 
-        // Check if the entity is solid then we need to revert back to the last free space
-        if (tmpEntity != null) {
-            if (tmpEntity.getPhysicsObject().getSolid() == true) {
+        // // Check if the entity is solid then we need to revert back to the last free space
+        // if (tmpEntity != null) {
+        //     if (tmpEntity.getPhysicsObject().getSolid() == true) {
                 
-                // Create a revert vector that backtracks the route until it finds a free space
-                const revertVec = new MathVector(0, 0);
-                revertVec.subtract(vec);
-                revertVec.normalize();
+        //         // Create a revert vector that backtracks the route until it finds a free space
+        //         const revertVec = new MathVector(0, 0);
+        //         revertVec.subtract(vec);
+        //         revertVec.normalize();
 
-                // Backtrack  the route until a space with no collision is found
-                for (let i = 0; i < vec.length(); i++) {
-                    this.position.add(revertVec);
+        //         // Backtrack  the route until a space with no collision is found
+        //         for (let i = 0; i < vec.length(); i++) {
+        //             this.position.add(revertVec);
 
 
-                    // Check if any collision has accured in the movement
-                    const tmpEntity = this.collisionObject.checkBoxCollision();
+        //             // Check if any collision has accured in the movement
+        //             const tmpEntity = this.collisionObject.checkBoxCollision();
 
-                    // Break the loop when a free space is found
-                    if (tmpEntity == null) {
-                        break;  // Array return null thus the space is free
-                    }
-                    else
-                    {
-                        if (tmpEntity.getPhysicsObject().getSolid() == false) {
-                            break;
-                        }
-                    }
+        //             // Break the loop when a free space is found
+        //             if (tmpEntity == null) {
+        //                 break;  // Array return null thus the space is free
+        //             }
+        //             else
+        //             {
+        //                 if (tmpEntity.getPhysicsObject().getSolid() == false) {
+        //                     break;
+        //                 }
+        //             }
 
-                }
+        //         }
 
-            }
-        }
+        //     }
+        // }
 
 
     }
