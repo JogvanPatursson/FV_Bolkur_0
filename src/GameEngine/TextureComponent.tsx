@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from "react-dom";
 
 
-function TextureComponent(aImgSrc : string, aX : number, aY : number, aWidth : number, aHeight : number) {
+function TextureComponent(aImgSrc : string, aX : number, aY : number, aWidth : number, aHeight : number, rotation = 0) {
 
     return (
         <img 
@@ -14,7 +14,8 @@ function TextureComponent(aImgSrc : string, aX : number, aY : number, aWidth : n
             top: `${aY}px`,
             width: `${aWidth}px`,
             height: `${aHeight}px`,
-            backgroundColor: "lightblue"
+            backgroundColor: "lightblue",
+            transform: `rotate(${rotation}deg)`
         }}
         ></img>
     );

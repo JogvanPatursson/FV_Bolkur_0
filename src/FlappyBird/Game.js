@@ -4,72 +4,95 @@ import { inherits } from 'util';
 import EntityList from '../GameEngine/EntityList';
 import { Timer } from '../GameEngine/Timer';
 import TheBird from './TheBird'
+import GameBackground from './GameBackground';
+import Pipe from './Pipe';
+import Ground from './Ground';
 
 // Constants
 
-const SCREENWIDTH = 400;
-const SCREENHEIGHT = 600;
+const SCREENWIDTH = 1280;
+const SCREENHEIGHT = 720;
+let gameRunning = false;
 
+const pipeList = new Array();
+const nonCollidableList = new EntityList();
+const collidableList = new EntityList();
+const background = new GameBackground(nonCollidableList, SCREENWIDTH, SCREENHEIGHT);
+const bird = new TheBird(collidableList);
+const ground = new Ground(collidableList, SCREENWIDTH, SCREENHEIGHT);
 
+let currentMillis = 0;
+let prevMillis = 0;
 
-const entityList = new EntityList();
-const bird = new TheBird(entityList);
-const bird1 = new TheBird(entityList);
-bird.entity.getPhysicsObject().setX(200);
-bird1.entity.getPhysicsObject().setX(0);
-
-window.requestAnimationFrame(gameLoop);
-
-function gameLoop() {
-    if(bird1.entity.getPhysicsObject().getX() + bird1.entity.getPhysicsObject().getCollisionObject().getWidth() > SCREENWIDTH) {
-        bird1.entity.getPhysicsObject().setX(0);
+window.addEventListener("keydown", event => {
+    if (event.isComposing || event.keyCode === 32) {
+        gameRunning = true;
+        bird.jump();
+        return;
     }
-    bird1.entity.getPhysicsObject().setHspeed(1);
-    bird.update();
-    bird1.update();
-    window.requestAnimationFrame(gameLoop);
-}
+        
+});
 
 function Game() {
-    const [time, setTime] = useState(0);
+    const [millis, setMillis] = useState(0);
     const [deltaTime, setDeltaTime] = useState(0);
     const [fps, setFPS] = useState(0);
 
 
-    Timer((time, deltaTime, fps)=>{
-        setTime(time);
-        setDeltaTime(deltaTime);
-        setFPS(Math.floor(fps));
+    Timer((millis, deltaTime, fps)=>{
+        if (gameRunning) {
+            
+            setMillis(millis);
+            setDeltaTime(deltaTime);
+            setFPS(Math.floor(fps));
+        
+            // Spawner code
+            if(currentMillis < prevMillis) {
+                let tmpPipe = new Pipe(collidableList, SCREENWIDTH, SCREENHEIGHT);
+                pipeList.push(tmpPipe);
+            }
+            prevMillis = currentMillis;
+            currentMillis = Math.floor(millis) % 2000;
+
+            bird.update();
+
+            pipeList.forEach(pipe => {
+                pipe.update();
+            });
+        }
+        
+        if (bird.entity.collides(collidableList)) {
+            gameRunning = false;
+        }
     });
     
 
     return(
-        <div className= "gameLoop" 
+        <div className= "Game"
             style= 
             {{
                 backgroundColor: `#00f1f1`, 
                 position: `absolute`, 
-                top:`100px`, 
-                left:`100px`,
+                top:`10px`, 
+                left:`10px`,
                 width:`${SCREENWIDTH}px`,
                 height:`${SCREENHEIGHT}px`}}>
+                    
+                    
+
             <div className = "Background">
-
-
+                {background.render()}
             </div>
             
             <div className = "GameElements">
-                {bird.getEntity().getPhysicsObject().getX()}
-                <br></br>
-                {bird1.entity.CollidesWith(entityList, bird)? "NO":"YES"}
-                <br></br>
-                {bird1.render()}
                 {bird.render()}
+                {pipeList.map(pipe => pipe.render())}
+                {ground.render()}
             </div>
 
             <div className = "Hud" style = {{position:`absolute`, left: `10px`, top: `10px`, backgroundColor: 'lightGray'}}>
-                Seconds: {Math.floor(time / 1000)}<br/>
-                Delta time: {Math.floor(deltaTime)}<br/>
+                Seconds: {Math.floor(millis / 1000)}<br/>
+                Delta time(milli): {Math.floor(deltaTime)}<br/>
                 fps {Math.floor(fps)}<br/>
             </div>
         

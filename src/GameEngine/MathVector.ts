@@ -119,7 +119,7 @@ export default class MathVector {
         @return : the angle in degrees
     */
     public getAngle() : number {
-        return Math.atan(this.getX() / this.getY());
+        return Math.atan(this.getX() / this.getY()) * 90;
     }
 
     /*
