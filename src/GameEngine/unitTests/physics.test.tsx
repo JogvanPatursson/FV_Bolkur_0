@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Physics from '../GameEngine/Physics';
-import PhysicsComponent from '../GameEngine/Physics';
+import Physics from '../Physics';
+import PhysicsComponent from '../Physics';
 
 test('Physics - hspeed test', () => {
     
