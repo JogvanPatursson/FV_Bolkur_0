@@ -1,6 +1,4 @@
-import { render } from '@testing-library/react';
 import  { useState } from 'react'; 
-import { inherits } from 'util';
 import EntityList from '../GameEngine/EntityList';
 import { Timer } from '../GameEngine/Timer';
 import TheBird from './TheBird'
@@ -13,6 +11,9 @@ import Ground from './Ground';
 const SCREENWIDTH = 1280;
 const SCREENHEIGHT = 720;
 let gameRunning = false;
+let gameOver = false;
+let gameoverVisible = "hidden";
+let score = -3;
 
 const pipeList = new Array();
 const nonCollidableList = new EntityList();
@@ -40,16 +41,24 @@ function Game() {
 
 
     Timer((millis, deltaTime, fps)=>{
+        setMillis(millis);
+        setDeltaTime(deltaTime);
+        setFPS(Math.floor(fps));
+
+        if(gameOver) {
+            gameoverVisible = "visible";
+        }
+
         if (gameRunning) {
-            
-            setMillis(millis);
-            setDeltaTime(deltaTime);
-            setFPS(Math.floor(fps));
+            if(gameOver && gameRunning) {
+                window.location.reload();
+            }
         
             // Spawner code
             if(currentMillis < prevMillis) {
                 let tmpPipe = new Pipe(collidableList, SCREENWIDTH, SCREENHEIGHT);
                 pipeList.push(tmpPipe);
+                score += 1;
             }
             prevMillis = currentMillis;
             currentMillis = Math.floor(millis) % 2000;
@@ -59,11 +68,14 @@ function Game() {
             pipeList.forEach(pipe => {
                 pipe.update();
             });
+            if (bird.entity.collides(collidableList)) {
+                gameRunning = false;
+                gameOver = true;
+                
+            }
         }
         
-        if (bird.entity.collides(collidableList)) {
-            gameRunning = false;
-        }
+
     });
     
 
@@ -91,9 +103,21 @@ function Game() {
             </div>
 
             <div className = "Hud" style = {{position:`absolute`, left: `10px`, top: `10px`, backgroundColor: 'lightGray'}}>
-                Seconds: {Math.floor(millis / 1000)}<br/>
-                Delta time(milli): {Math.floor(deltaTime)}<br/>
+                Score: {score > 0 ? score : 0}<br/>
                 fps {Math.floor(fps)}<br/>
+            </div>
+            <div className = "ScoreScreen" 
+                style= {{
+                    position: `absolute`,
+                    backgroundColor: `lightGray`, 
+                    fontSize: `400%`,
+                    textAlign: `center`, 
+                    visibility: `${gameoverVisible}`, 
+                    left: `${SCREENWIDTH/2 - 100}px`, 
+                    top: `${SCREENHEIGHT/2 - 100}px`}}>
+                Game Over
+                <br></br>
+                Score = {score > 0 ? score : 0}
             </div>
         
         </div>
