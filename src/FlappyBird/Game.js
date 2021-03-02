@@ -26,10 +26,20 @@ let currentMillis = 0;
 let prevMillis = 0;
 
 window.addEventListener("keydown", event => {
+    // SPACE IS PRESSED
     if (event.isComposing || event.keyCode === 32) {
-        gameRunning = true;
-        bird.jump();
+        
+        if (!gameOver) {
+            gameRunning = true;
+            bird.jump();
+        }
+
         return;
+    }
+
+    // ENTER IS PRESSED
+    if (event.isComposing || event.keyCode == 13) {
+        window.location.reload();
     }
         
 });
@@ -50,15 +60,16 @@ function Game() {
         }
 
         if (gameRunning) {
-            if(gameOver && gameRunning) {
-                window.location.reload();
-            }
         
             // Spawner code
             if(currentMillis < prevMillis) {
                 let tmpPipe = new Pipe(collidableList, SCREENWIDTH, SCREENHEIGHT);
                 pipeList.push(tmpPipe);
                 score += 1;
+
+                if (score >= 2) {
+                    pipeList.shift();
+                } 
             }
             prevMillis = currentMillis;
             currentMillis = Math.floor(millis) % 2000;
@@ -71,7 +82,6 @@ function Game() {
             if (bird.entity.collides(collidableList)) {
                 gameRunning = false;
                 gameOver = true;
-                
             }
         }
         
@@ -83,7 +93,7 @@ function Game() {
         <div className= "Game"
             style= 
             {{
-                backgroundColor: `#00f1f1`, 
+                backgroundColor: `rgb(0, 0, 0)`, 
                 position: `absolute`, 
                 top:`10px`, 
                 left:`10px`,
@@ -113,11 +123,13 @@ function Game() {
                     fontSize: `400%`,
                     textAlign: `center`, 
                     visibility: `${gameoverVisible}`, 
-                    left: `${SCREENWIDTH/2 - 100}px`, 
-                    top: `${SCREENHEIGHT/2 - 100}px`}}>
+                    left: `${SCREENWIDTH/2 - 300}px`, 
+                    top: `${SCREENHEIGHT/2 - 200}px`}}>
                 Game Over
                 <br></br>
                 Score = {score > 0 ? score : 0}
+                <br></br>
+                Press "ENTER" to restart
             </div>
         
         </div>

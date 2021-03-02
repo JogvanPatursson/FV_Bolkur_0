@@ -2,6 +2,7 @@
     VECTOR CLASS CREATED FOR THE GAME OF LIFE ENGINE
 */
 
+import { throws } from "assert";
 import { couldStartTrivia } from "typescript";
 
 
@@ -114,15 +115,6 @@ export default class MathVector {
     }
 
     /*
-        getAngle
-        Returns the angle of the vector in degrees, where an angle of 0 is a right pointing vector.
-        @return : the angle in degrees
-    */
-    public getAngle() : number {
-        return Math.atan(this.getX() / this.getY()) * 90;
-    }
-
-    /*
         setAngle
         Sets the angle of the vector to a desired angle
         @param angle : angle in degrees
@@ -131,22 +123,13 @@ export default class MathVector {
         const vecLength = this.length();
 
         // Use 2d rotational matrix
-        const x2 = 1*Math.cos(-angle/RadToDeg);
-        const y2 = 1*Math.sin(-angle/RadToDeg);
+        const x2 = 1*Math.cos(angle/RadToDeg);
+        const y2 = -1*Math.sin(angle/RadToDeg);
 
         // Use sinus and cosinus to set angle
         this.createVectorFromTwoPoints(0, 0, x2, y2);
-        
+        this.normalize();
         this.scalarMultiplication(vecLength);
-    }
-
-    /*
-        addToAngle
-        Changes the angle by a desired value
-        @param angle : angle in degrees
-    */
-    public addToAngle(angle : number) {
-        this.setAngle(this.getAngle() + angle);
     }
 
     /*
