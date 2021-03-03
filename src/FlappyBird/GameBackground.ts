@@ -1,4 +1,4 @@
-import SkyTileSprite from '../GameAssets/SkyTileSprite.png';
+import SkyTileSprite from './GameAssets/SkyTileSprite.png';
 import Entity from '../GameEngine/Entity';
 import EntityList from '../GameEngine/EntityList';
 

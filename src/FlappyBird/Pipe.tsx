@@ -1,5 +1,5 @@
 import { randomInt } from 'crypto';
-import ColumnSprite from '../GameAssets/ColumnSprite.png';
+import ColumnSprite from './GameAssets/ColumnSprite.png';
 import Entity from '../GameEngine/Entity';
 import EntityList from '../GameEngine/EntityList';
 

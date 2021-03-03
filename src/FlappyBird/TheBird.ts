@@ -1,4 +1,4 @@
-import FlappyBird from '../GameAssets/flappy-bird.png';
+import FlappyBird from './GameAssets/flappy-bird.png';
 import Entity from '../GameEngine/Entity';
 import EntityList from '../GameEngine/EntityList';
 

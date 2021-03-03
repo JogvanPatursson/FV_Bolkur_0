@@ -1,4 +1,4 @@
-import GrassThinSprite from '../GameAssets/GrassThinSprite.png';
+import GrassThinSprite from './GameAssets/GrassThinSprite.png';
 import Entity from '../GameEngine/Entity';
 import EntityList from '../GameEngine/EntityList';
 
