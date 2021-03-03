@@ -45,11 +45,11 @@ class Player {
 				break;
 		}
         entityList.pushArray(this.entity);
-		
+
+		this.entity.getPhysicsObject().setVspeed((Math.floor(Math.random()*5) + 5));
     }
 
     update() {
-		this.entity.getPhysicsObject().setVspeed(6);
         this.entity.update();
     }
 

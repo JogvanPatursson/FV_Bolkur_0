@@ -18,6 +18,9 @@ const nonCollidables = new EntityList();
 const collidables = new EntityList();
 const player = new Player(collidables);
 let enemies = new Array();
+let backgrounds = new Array();
+backgrounds.push(new Background(0, 0,SCREENWIDTH, SCREENHEIGHT));
+backgrounds.push(new Background(0, -SCREENHEIGHT, SCREENWIDTH, SCREENHEIGHT));
 
 let currentMillis = 0;
 let prevMillis = 0;
@@ -37,24 +40,26 @@ window.addEventListener("keydown", event => {
     }
     
     // left arrow
-    if (event.isComposing || event.code === `ArrowLeft`) {
-        player.move(0);
-        return;
-    }
-    // right arrow
-    if (event.isComposing || event.code === `ArrowRight`) {
-        player.move(1);
-        return;
-    }
-    // up arrow
-    if (event.isComposing || event.code === `ArrowUp`) {
-        player.move(2);
-        return;
-    }
-    // down arrow
-    if (event.isComposing || event.code === `ArrowDown`) {
-        player.move(3);
-        return;
+    if (!gameOver && gameRunning) {
+        if (event.isComposing || event.code === `ArrowLeft`) {
+            player.move(0);
+            return;
+        }
+        // right arrow
+        if (event.isComposing || event.code === `ArrowRight`) {
+            player.move(1);
+            return;
+        }
+        // up arrow
+        if (event.isComposing || event.code === `ArrowUp`) {
+            player.move(2);
+            return;
+        }
+        // down arrow
+        if (event.isComposing || event.code === `ArrowDown`) {
+            player.move(3);
+            return;
+        }
     }
 
     // ENTER IS PRESSED
@@ -81,13 +86,20 @@ function Game() {
         }
 
         if (gameRunning) {
+
         
-            // Spawner code
+            if (backgrounds[0].getEntity().getPhysicsObject().getY() > SCREENHEIGHT - 20) {
+                backgrounds.push(new Background(0, -SCREENHEIGHT, SCREENWIDTH, SCREENHEIGHT));
+                backgrounds.shift();
+            }
+
+            // Spawner code enemies
             if(currentMillis < prevMillis) {
                 enemies.push(new Enemy(collidables));
-                //score += 1;
+                
 
                 if (enemies[0].getEntity().getPhysicsObject().getY() > SCREENHEIGHT) {
+                    score += 1;
                     enemies.shift();
                 } 
             }
@@ -98,11 +110,20 @@ function Game() {
 
             enemies.forEach(enemy => {
                 enemy.update();
+
+                if (enemy.entity.collides(collidables)) {
+                    enemy.getEntity().getPhysicsObject().setVspeed(13);
+               }
             });
-            // if (bird.entity.collides(collidableList)) {
-            //     gameRunning = false;
-            //     gameOver = true;
-            // }
+
+            backgrounds.forEach(background => {
+                background.update();
+            });
+
+            if (player.entity.collides(collidables)) {
+                 gameRunning = false;
+                 gameOver = true;
+            }
         }
         
 
@@ -113,6 +134,7 @@ function Game() {
         <div className= "Game"
             style= 
             {{
+                overflow:`hidden`,
                 backgroundColor: `rgb(0, 0, 0)`, 
                 position: `absolute`, 
                 top:`10px`, 
@@ -121,7 +143,7 @@ function Game() {
                 height:`${SCREENHEIGHT}px`}}>
                     
             <div className = "Background">
-                {Background(SCREENWIDTH, SCREENHEIGHT)}
+                {backgrounds.map(background => background.render())}
             </div>
             
             <div className = "GameElements">

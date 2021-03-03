@@ -1,14 +1,17 @@
 import CarSprite from './GameAssets/GrayCar.png';
 import Entity from '../GameEngine/Entity';
 import EntityList from '../GameEngine/EntityList';
+import { getMaxListeners } from 'process';
 
 const LANEWIDTH = 135;
 class Player {
     entity : Entity;
+    vspeed : number;
     
     constructor(entityList : EntityList) {
-        this.entity = new Entity(entityList.length(), CarSprite, 300, 400, 50, 100);
+        this.entity = new Entity(entityList.length(), CarSprite, LANEWIDTH * 3 + LANEWIDTH/2 - 25, 400, 50, 100);
         entityList.pushArray(this.entity);
+        this.vspeed = 0;
     }
 
 	move(dir : number) {
@@ -20,24 +23,44 @@ class Player {
 			this.entity.getPhysicsObject().setX(this.entity.getPhysicsObject().getX() + LANEWIDTH);
 				break;
 			case 2:
-			this.entity.getPhysicsObject().setY(this.entity.getPhysicsObject().getY() - 20);
+                this.vspeed -= 5;
 				break;
 			case 3:
-			this.entity.getPhysicsObject().setY(this.entity.getPhysicsObject().getY() + 20);
+                this.vspeed += 5;
 				break;
 		 
-			 default:
-				 break;
-		 }
+			default:
+				break;
+        }
+
 	}
 
     update() {
-        // if (this.entity.getPhysicsObject().getY() < 0) {
-        //     this.entity.getPhysicsObject().setY(0);
-        // }
 
-        // this.entity.getPhysicsObject().setGravityDirection(270)
-        // this.entity.getPhysicsObject().setGravity(0.5);
+        if (this.vspeed > 5) { this.vspeed = 5; }
+        if (this.vspeed < -5) { this.vspeed = -5; }
+
+        this.entity.getPhysicsObject().setVspeed(this.vspeed);
+        
+        // Boundaries
+        if (this.entity.getPhysicsObject().getX() < LANEWIDTH) {
+            this.entity.getPhysicsObject().setX(LANEWIDTH + LANEWIDTH/2 - 25);
+        }
+
+        if (this.entity.getPhysicsObject().getX() > LANEWIDTH * 7) {
+            this.entity.getPhysicsObject().setX(LANEWIDTH * 7 - LANEWIDTH/2 - 25);
+        }
+
+        if (this.entity.getPhysicsObject().getY() < 100) {
+            this.entity.getPhysicsObject().setY(100);
+            this.vspeed = 0;
+        }
+
+        if (this.entity.getPhysicsObject().getY() > 600) {
+            this.entity.getPhysicsObject().setY(600);
+            this.vspeed = 0;
+        }
+
         this.entity.update();
     }
 
