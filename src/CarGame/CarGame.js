@@ -3,11 +3,12 @@ import EntityList from '../GameEngine/EntityList';
 import { Timer } from '../GameEngine/Timer';
 import Player from './Player';
 import Enemy from './Enemy';
+import Background from './background';
 
 // Constants
 
-const SCREENWIDTH = 800;
-const SCREENHEIGHT = 1000;
+const SCREENWIDTH = 1080;
+const SCREENHEIGHT = 800;
 let gameRunning = false;
 let gameOver = false;
 let gameoverVisible = "hidden";
@@ -17,10 +18,10 @@ const nonCollidables = new EntityList();
 const collidables = new EntityList();
 const player = new Player(collidables);
 let enemies = new Array();
-// const background = new GameBackground(nonCollidableList, SCREENWIDTH, SCREENHEIGHT);
 
 let currentMillis = 0;
 let prevMillis = 0;
+let spawnRate = 550;
 
 window.addEventListener("keydown", event => {
     event.preventDefault();
@@ -67,6 +68,7 @@ function Game() {
     const [millis, setMillis] = useState(0);
     const [deltaTime, setDeltaTime] = useState(0);
     const [fps, setFPS] = useState(0);
+   
 
 
     Timer((millis, deltaTime, fps)=>{
@@ -82,16 +84,15 @@ function Game() {
         
             // Spawner code
             if(currentMillis < prevMillis) {
-                //let tmpPipe = new Pipe(collidableList, SCREENWIDTH, SCREENHEIGHT);
                 enemies.push(new Enemy(collidables));
                 //score += 1;
 
-                if (score >= 2) {
-                    //pipeList.shift();
+                if (enemies[0].getEntity().getPhysicsObject().getY() > SCREENHEIGHT) {
+                    enemies.shift();
                 } 
             }
             prevMillis = currentMillis;
-            currentMillis = Math.floor(millis) % 2000;
+            currentMillis = Math.floor(millis) % spawnRate;
 
             player.update();
 
@@ -119,16 +120,13 @@ function Game() {
                 width:`${SCREENWIDTH}px`,
                 height:`${SCREENHEIGHT}px`}}>
                     
-                    
-
             <div className = "Background">
-                {/* {background.render()} */}
+                {Background(SCREENWIDTH, SCREENHEIGHT)}
             </div>
             
             <div className = "GameElements">
-                { player.render()}
+                {player.render()}
                 {enemies.map(enemy => enemy.render())}
-                {/* {ground.render()} */}
             </div>
 
             <div className = "Hud" style = {{position:`absolute`, left: `10px`, top: `10px`, backgroundColor: 'lightGray'}}>

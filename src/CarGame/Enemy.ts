@@ -7,7 +7,9 @@ import RedCar from './GameAssets/RedCar.png';
 import YellowCar from './GameAssets/YellowCar.png';
 
 
-const lanes = 3;
+const lanes = 6;
+const LANEWIDTH = 135;
+const laneOffset = 62.5;
 
 class Player {
     entity : Entity;
@@ -15,13 +17,14 @@ class Player {
 	y: number;
 	width: number;
 	height: number;
-    
+
     constructor(entityList : EntityList) {
 		// Lane position
-		this.x = Math.floor(Math.random()*lanes);
 		this.y = -100;
 		this.width = 50;
 		this.height = 100;
+		this.x = (Math.floor(Math.random()*lanes) + 1) * LANEWIDTH + laneOffset - (this.width/2);
+
 		let carChoice = Math.floor(Math.random()*4)
 
 		switch (carChoice) {

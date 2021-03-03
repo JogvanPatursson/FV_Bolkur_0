@@ -2,28 +2,28 @@ import CarSprite from './GameAssets/GrayCar.png';
 import Entity from '../GameEngine/Entity';
 import EntityList from '../GameEngine/EntityList';
 
-
+const LANEWIDTH = 135;
 class Player {
     entity : Entity;
     
     constructor(entityList : EntityList) {
-        this.entity = new Entity(entityList.length(), CarSprite, 300, 400, 100, 50);
+        this.entity = new Entity(entityList.length(), CarSprite, 300, 400, 50, 100);
         entityList.pushArray(this.entity);
     }
 
 	move(dir : number) {
 		 switch (dir) {
 			 case 0:
-				this.entity.getPhysicsObject().setX(this.entity.getPhysicsObject().getX() - 100);
+				this.entity.getPhysicsObject().setX(this.entity.getPhysicsObject().getX() - LANEWIDTH);
 				break;
 			case 1:
-			this.entity.getPhysicsObject().setX(this.entity.getPhysicsObject().getX() + 100);
+			this.entity.getPhysicsObject().setX(this.entity.getPhysicsObject().getX() + LANEWIDTH);
 				break;
 			case 2:
-			this.entity.getPhysicsObject().setY(this.entity.getPhysicsObject().getY() - 100);
+			this.entity.getPhysicsObject().setY(this.entity.getPhysicsObject().getY() - 20);
 				break;
 			case 3:
-			this.entity.getPhysicsObject().setY(this.entity.getPhysicsObject().getY() + 100);
+			this.entity.getPhysicsObject().setY(this.entity.getPhysicsObject().getY() + 20);
 				break;
 		 
 			 default:
