@@ -7,7 +7,7 @@ class FileHandling {
 
     // Gets variable myData in localStorage
     getData(){
-        let data = localStorage.getItem('myData');
+        return localStorage.getItem('myData');
     }
 }
 
