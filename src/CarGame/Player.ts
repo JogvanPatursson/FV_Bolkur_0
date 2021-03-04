@@ -9,7 +9,7 @@ class Player {
     vspeed : number;
     
     constructor(entityList : EntityList) {
-        this.entity = new Entity(entityList.length(), CarSprite, LANEWIDTH * 3 + LANEWIDTH/2 - 25, 400, 50, 100);
+        this.entity = new Entity(entityList.length(), CarSprite, LANEWIDTH * 3 + LANEWIDTH/2 - 25, 500, 50, 100);
         entityList.pushArray(this.entity);
         this.vspeed = 0;
     }

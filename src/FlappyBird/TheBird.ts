@@ -7,7 +7,7 @@ class TheBird {
     entity : Entity;
     
     constructor(entityList : EntityList) {
-        this.entity = new Entity(entityList.length(), FlappyBird, 0, 100, 50, 50);
+        this.entity = new Entity(entityList.length(), FlappyBird, 0, 100, 40, 30);
         entityList.pushArray(this.entity);
 
         this.entity.getPhysicsObject().setX(200);

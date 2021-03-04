@@ -6,7 +6,7 @@ class FileHandling {
     }
 
     // Gets variable myData in localStorage
-    getData(){
+    getData() : string | null {
         return localStorage.getItem('myData');
     }
 }

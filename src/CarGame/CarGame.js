@@ -24,7 +24,7 @@ backgrounds.push(new Background(0, -SCREENHEIGHT, SCREENWIDTH, SCREENHEIGHT));
 
 let currentMillis = 0;
 let prevMillis = 0;
-let spawnRate = 550;
+let spawnRate = 450;
 
 window.addEventListener("keydown", event => {
     event.preventDefault();
@@ -100,6 +100,7 @@ function Game() {
 
                 if (enemies[0].getEntity().getPhysicsObject().getY() > SCREENHEIGHT) {
                     score += 1;
+                    if (spawnRate > 150) { spawnRate -= 1; }
                     enemies.shift();
                 } 
             }
@@ -112,7 +113,7 @@ function Game() {
                 enemy.update();
 
                 if (enemy.entity.collides(collidables)) {
-                    enemy.getEntity().getPhysicsObject().setVspeed(13);
+                    enemy.getEntity().getPhysicsObject().setVspeed(14);
                }
             });
 

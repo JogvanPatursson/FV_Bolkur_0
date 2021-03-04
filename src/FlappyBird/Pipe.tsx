@@ -10,11 +10,11 @@ export default class Pipe {
     
     constructor(entityList : EntityList, SCREENWIDTH : number, SCREENHEIGHT : number) {
         // Tmp variables
-        const hole = 250;
-        const startPos = (Math.random() * SCREENHEIGHT/3) + SCREENHEIGHT/3 - hole/2;
+        const hole = 170;
+        const startPos = (Math.random() * SCREENHEIGHT/1.6) + SCREENHEIGHT/6 - hole/2;
 
-        this.columnTop = new Entity(entityList.length(), ColumnSprite, SCREENWIDTH, 0, 80, startPos, 180);
-        this.columnBottom = new Entity(entityList.length(), ColumnSprite, SCREENWIDTH, startPos + hole, 80, SCREENHEIGHT - startPos - hole, 0);
+        this.columnTop = new Entity(entityList.length(), ColumnSprite, SCREENWIDTH, -512 + startPos, 80, 512, 180);
+        this.columnBottom = new Entity(entityList.length(), ColumnSprite, SCREENWIDTH, startPos + hole, 80, 512, 0);
         entityList.pushArray(this.columnTop);
         entityList.pushArray(this.columnBottom);
     }

@@ -18,9 +18,14 @@ let score = -3;
 const pipeList = new Array();
 const nonCollidableList = new EntityList();
 const collidableList = new EntityList();
-const background = new GameBackground(nonCollidableList, SCREENWIDTH, SCREENHEIGHT);
+//const background = new GameBackground(nonCollidableList, SCREENWIDTH, SCREENHEIGHT);
 const bird = new TheBird(collidableList);
-const ground = new Ground(collidableList, SCREENWIDTH, SCREENHEIGHT);
+let grounds = new Array();
+grounds.push(new Ground(collidableList, SCREENWIDTH, SCREENHEIGHT));
+grounds.push(new Ground(collidableList, SCREENWIDTH*2, SCREENHEIGHT));
+let backgrounds = new Array();
+backgrounds.push(new GameBackground(nonCollidableList, 0, 0, SCREENWIDTH, SCREENHEIGHT));
+backgrounds.push(new GameBackground(nonCollidableList, SCREENWIDTH, 0, SCREENWIDTH, SCREENHEIGHT));
 
 let currentMillis = 0;
 let prevMillis = 0;
@@ -62,6 +67,16 @@ function Game() {
 
         if (gameRunning) {
         
+            // Background spawn
+            if (backgrounds[0].getEntity().getPhysicsObject().getX() + SCREENWIDTH < 20) {
+                backgrounds.push(new GameBackground(nonCollidableList, SCREENWIDTH, 0, SCREENWIDTH, SCREENHEIGHT));
+                backgrounds.shift();
+            }
+            //Groundspawn
+            if (grounds[0].getEntity().getPhysicsObject().getX() + SCREENWIDTH < 0) {
+                grounds.push(new Ground(collidableList, SCREENWIDTH*2, SCREENHEIGHT));
+                grounds.shift();
+            }
             // Spawner code
             if(currentMillis < prevMillis) {
                 let tmpPipe = new Pipe(collidableList, SCREENWIDTH, SCREENHEIGHT);
@@ -80,6 +95,12 @@ function Game() {
             pipeList.forEach(pipe => {
                 pipe.update();
             });
+            grounds.forEach(ground => {
+                ground.update();
+            });
+            backgrounds.forEach(background => {
+                background.update();
+            });
             if (bird.entity.collides(collidableList)) {
                 gameRunning = false;
                 gameOver = true;
@@ -93,7 +114,8 @@ function Game() {
     return(
         <div className= "Game"
             style= 
-            {{
+            {{  
+                overflow: 'hidden',
                 backgroundColor: `rgb(0, 0, 0)`, 
                 position: `absolute`, 
                 top:`10px`, 
@@ -104,13 +126,13 @@ function Game() {
                     
 
             <div className = "Background">
-                {background.render()}
+                {backgrounds.map(background => background.render())}
             </div>
             
             <div className = "GameElements">
                 {bird.render()}
                 {pipeList.map(pipe => pipe.render())}
-                {ground.render()}
+                {grounds.map(ground => ground.render())}
             </div>
 
             <div className = "Hud" style = {{position:`absolute`, left: `10px`, top: `10px`, backgroundColor: 'lightGray'}}>

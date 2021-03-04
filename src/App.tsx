@@ -4,8 +4,8 @@ import CarGame from './CarGame/CarGame';
 
 const App: React.FC = () => {
   
-    return CarGame();
-    //return FlappyGame();
+    //return CarGame();
+    return FlappyGame();
     
 };
 

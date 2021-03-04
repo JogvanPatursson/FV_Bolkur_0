@@ -11,6 +11,11 @@ export default class Ground {
         entityList.pushArray(this.entity);
     }
 
+    update() {
+		this.entity.getPhysicsObject().setHspeed(-3.4);
+		this.entity.getPhysicsObject().update();
+	}
+
     render() {
         return this.entity.render();
     }

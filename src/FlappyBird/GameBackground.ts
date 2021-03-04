@@ -6,11 +6,15 @@ import EntityList from '../GameEngine/EntityList';
 export default class GameBackground {
     entity : Entity;
     
-    constructor(entityList : EntityList, screenWidth : number, screenHeight : number) {
-        this.entity = new Entity(entityList.length(), SkyTileSprite, 0, 0, screenWidth, screenHeight);
+    constructor(entityList : EntityList, x: number, y: number, screenWidth : number, screenHeight : number) {
+        this.entity = new Entity(entityList.length(), SkyTileSprite, x, y, screenWidth, screenHeight);
         entityList.pushArray(this.entity);
     }
 
+    update() {
+        this.entity.getPhysicsObject().setHspeed(-0.2);
+        this.entity.update();
+    }
     render() {
         return this.entity.render();
     }
