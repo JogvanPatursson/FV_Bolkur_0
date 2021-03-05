@@ -102,6 +102,7 @@ function Game() {
                 background.update();
             });
             if (bird.entity.collides(collidableList)) {
+                // COULD PLAY SOUND HERE WHEN HIT
                 gameRunning = false;
                 gameOver = true;
             }
