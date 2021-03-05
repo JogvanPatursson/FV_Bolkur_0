@@ -22,6 +22,6 @@ export default class AudioFile {
     }
 
     public loopAudio() : void {
-        this.sound.loop();
+        this.sound.loop = true;
     }
 }
