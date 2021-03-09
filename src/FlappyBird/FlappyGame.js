@@ -107,7 +107,7 @@ function Game() {
                 }
 
                 // If current score is higher than highscore in local storage, set current score to highscore
-                if(highscore > score){
+                if(score > highscore){
                     fileHandling.setData(score, 'highscore');
                     highscore = score;
                 }
