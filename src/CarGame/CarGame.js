@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import EntityList from '../GameEngine/EntityList';
-import { Timer } from '../GameEngine/Timer';
+import { GameLoop } from '../GameEngine/GameLoop';
 import Player from './Player';
 import Enemy from './Enemy';
 import Background from './background';
@@ -66,7 +66,7 @@ function Game() {
    
 
 
-    Timer((millis, deltaTime, fps)=>{
+    GameLoop((millis, deltaTime, fps)=>{
         setMillis(millis);
         setDeltaTime(deltaTime);
         setFPS(Math.floor(fps));

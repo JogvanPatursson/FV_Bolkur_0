@@ -1,6 +1,6 @@
 import {useRef, useEffect} from 'react'
 
-export const Timer = (callback) => {
+export const GameLoop = (callback) => {
 
     const previousTime = useRef();
     const requestID = useRef();
