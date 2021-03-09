@@ -1,13 +1,13 @@
 class FileHandling {
 
     // Sets variable 'myData' in localStorage
-    setData(data : string){
-        localStorage.setItem('myData', data);
+    setData(data : string, dataName : string){
+        localStorage.setItem(dataName, data);
     }
 
     // Gets variable myData in localStorage
-    getData() : string | null {
-        return localStorage.getItem('myData');
+    getData(dataName : string) : string | null {
+        return localStorage.getItem(dataName);
     }
 }
 

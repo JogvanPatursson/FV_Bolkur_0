@@ -5,6 +5,7 @@ import TheBird from './TheBird'
 import GameBackground from './GameBackground';
 import Pipe from './Pipe';
 import Ground from './Ground';
+import FileHandling from '../GameEngine/FileHandling';
 
 // Constants
 
@@ -14,6 +15,7 @@ let gameRunning = false;
 let gameOver = false;
 let gameoverVisible = "hidden";
 let score = -3;
+let highscore = score;
 
 const pipeList = new Array();
 const nonCollidableList = new EntityList();
@@ -29,6 +31,9 @@ backgrounds.push(new GameBackground(nonCollidableList, SCREENWIDTH, 0, SCREENWID
 
 let currentMillis = 0;
 let prevMillis = 0;
+
+// FileHandling object
+let filehandling = new FileHandling;
 
 window.addEventListener("keydown", event => {
     event.preventDefault();
@@ -102,9 +107,22 @@ function Game() {
                 background.update();
             });
             if (bird.entity.collides(collidableList)) {
+                // Call filehandling. Store score in local variable
+                highscore = parseInt(filehandling.getData('highscore'));
+                
+                if(score > highscore) {
+                    filehandling.setData(score, 'highscore');
+                    highscore = score;
+                }
+                
+                
+
                 // COULD PLAY SOUND HERE WHEN HIT
                 gameRunning = false;
                 gameOver = true;
+
+
+            
             }
         }
         
@@ -152,6 +170,8 @@ function Game() {
                 Game Over
                 <br></br>
                 Score = {score > 0 ? score : 0}
+                <br></br>
+                Highscore = {highscore > 0 ? highscore : 0}
                 <br></br>
                 Press "ENTER" to restart
             </div>
