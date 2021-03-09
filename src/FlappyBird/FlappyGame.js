@@ -6,6 +6,7 @@ import GameBackground from './GameBackground';
 import Pipe from './Pipe';
 import Ground from './Ground';
 import { KeyDown } from '../GameEngine/EventListener';
+import FileHandling from '../GameEngine/FileHandling';
 
 // Constants
 
@@ -15,7 +16,9 @@ let gameRunning = false;
 let gameOver = false;
 let gameoverVisible = "hidden";
 let score = -3;
+let highscore = score;
 
+const fileHandling = new FileHandling;
 const pipeList = new Array();
 const nonCollidableList = new EntityList();
 const collidableList = new EntityList();
@@ -95,6 +98,19 @@ function Game() {
                 background.update();
             });
             if (bird.entity.collides(collidableList)) {
+                highscore = fileHandling.getData('highscore');
+
+                // If 'highscore' is not created in local storage, set current score to highscore
+                if(highscore == null){
+                    fileHandling.setData(score, 'highscore');
+                    highscore = score;
+                }
+
+                // If current score is higher than highscore in local storage, set current score to highscore
+                if(highscore > score){
+                    fileHandling.setData(score, 'highscore');
+                    highscore = score;
+                }
                 // COULD PLAY SOUND HERE WHEN HIT
                 gameRunning = false;
                 gameOver = true;
@@ -145,6 +161,8 @@ function Game() {
                 Game Over
                 <br></br>
                 Score = {score > 0 ? score : 0}
+                <br></br>
+                Highscore = {highscore > 0 ? highscore : 0}
                 <br></br>
                 Press "ENTER" to restart
             </div>
