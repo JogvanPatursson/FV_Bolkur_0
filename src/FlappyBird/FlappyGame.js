@@ -5,6 +5,7 @@ import TheBird from './TheBird'
 import GameBackground from './GameBackground';
 import Pipe from './Pipe';
 import Ground from './Ground';
+import { KeyDown } from '../GameEngine/EventListener';
 
 // Constants
 
@@ -30,25 +31,17 @@ backgrounds.push(new GameBackground(nonCollidableList, SCREENWIDTH, 0, SCREENWID
 let currentMillis = 0;
 let prevMillis = 0;
 
-window.addEventListener("keydown", event => {
-    event.preventDefault();
-    // SPACE IS PRESSED
-    if (event.isComposing || event.keyCode === 32) {
-        
-        if (!gameOver) {
-            gameRunning = true;
-            bird.jump();
-        }
-
-        return;
+KeyDown('Space', event => { // Space pressed
+    if (!gameOver) {
+        gameRunning = true;
+        bird.jump();
     }
-
-    // ENTER IS PRESSED
-    if (event.isComposing || event.keyCode == 13) {
-        window.location.reload();
-    }
-        
 });
+
+KeyDown('Enter', event => { // Enter pressed
+    window.location.reload();
+});
+
 
 function Game() {
     const [millis, setMillis] = useState(0);

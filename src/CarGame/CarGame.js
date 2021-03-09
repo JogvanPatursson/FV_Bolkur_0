@@ -4,6 +4,7 @@ import { Timer } from '../GameEngine/Timer';
 import Player from './Player';
 import Enemy from './Enemy';
 import Background from './background';
+import { KeyDown } from '../GameEngine/EventListener'
 
 // Constants
 
@@ -26,48 +27,37 @@ let currentMillis = 0;
 let prevMillis = 0;
 let spawnRate = 450;
 
-window.addEventListener("keydown", event => {
-    event.preventDefault();
-    // SPACE IS PRESSED
-    if (event.isComposing || event.keyCode === 32) {
-        
-        if (!gameOver) {
-            gameRunning = true;
-            //bird.jump();
-        }
-
-        return;
-    }
-    
-    // left arrow
-    if (!gameOver && gameRunning) {
-        if (event.isComposing || event.code === `ArrowLeft`) {
-            player.move(0);
-            return;
-        }
-        // right arrow
-        if (event.isComposing || event.code === `ArrowRight`) {
-            player.move(1);
-            return;
-        }
-        // up arrow
-        if (event.isComposing || event.code === `ArrowUp`) {
-            player.move(2);
-            return;
-        }
-        // down arrow
-        if (event.isComposing || event.code === `ArrowDown`) {
-            player.move(3);
-            return;
-        }
-    }
-
-    // ENTER IS PRESSED
-    if (event.isComposing || event.keyCode == 13) {
-        window.location.reload();
-    }
-        
+KeyDown('Space', event => {
+    gameRunning = true;
 });
+
+KeyDown(`ArrowLeft`, event => {
+    if (!gameOver && gameRunning) {
+        player.move(0);
+    }
+});
+
+KeyDown(`ArrowRight`, event => {
+    if (!gameOver && gameRunning) {
+        player.move(1);
+    }
+});
+
+KeyDown(`ArrowUp`, event => {
+    if (!gameOver && gameRunning) {
+        player.move(2);
+    }
+});
+
+KeyDown(`ArrowDown`, event => {
+    if (!gameOver && gameRunning) {
+        player.move(3);
+    }
+});
+
+KeyDown('Enter', event => {
+    window.location.reload();
+})
 
 function Game() {
     const [millis, setMillis] = useState(0);
