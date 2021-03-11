@@ -1,11 +1,12 @@
 import  { useState } from 'react'; 
 import EntityList from '../GameEngine/EntityList';
-import { Timer } from '../GameEngine/Timer';
+import { GameLoop } from '../GameEngine/GameLoop';
 import TheBird from './TheBird'
 import GameBackground from './GameBackground';
 import Pipe from './Pipe';
 import Ground from './Ground';
-import AudioFile from '../GameEngine/AudioFile';
+import { KeyDown } from '../GameEngine/EventListener';
+import FileHandling from '../GameEngine/FileHandling';
 
 // Constants
 
@@ -15,7 +16,9 @@ let gameRunning = false;
 let gameOver = false;
 let gameoverVisible = "hidden";
 let score = -3;
+let highscore = score;
 
+const fileHandling = new FileHandling;
 const pipeList = new Array();
 const nonCollidableList = new EntityList();
 const collidableList = new EntityList();
@@ -31,38 +34,17 @@ backgrounds.push(new GameBackground(nonCollidableList, SCREENWIDTH, 0, SCREENWID
 let currentMillis = 0;
 let prevMillis = 0;
 
-//========================================================
-// Audio files
-//========================================================
-
-// music
-let musicSound = new AudioFile("sounds/scifi.mp3", 1);
-musicSound.loopAudio();
-
-// sound effects
-let jumpSound = new AudioFile("sounds/jmp.mp3", 10);
-let collisionSound = new AudioFile("sounds/slap.mp3", 2);
-
-window.addEventListener("keydown", event => {
-    event.preventDefault();
-    // SPACE IS PRESSED
-    if (event.isComposing || event.keyCode === 32) {
-        
-        if (!gameOver) {
-            gameRunning = true;
-            bird.jump();
-            jumpSound.playAudio();
-        }
-
-        return;
+KeyDown('Space', event => { // Space pressed
+    if (!gameOver) {
+        gameRunning = true;
+        bird.jump();
     }
-
-    // ENTER IS PRESSED
-    if (event.isComposing || event.keyCode == 13) {
-        window.location.reload();
-    }
-        
 });
+
+KeyDown('Enter', event => { // Enter pressed
+    window.location.reload();
+});
+
 
 function Game() {
     const [millis, setMillis] = useState(0);
@@ -70,7 +52,7 @@ function Game() {
     const [fps, setFPS] = useState(0);
 
 
-    Timer((millis, deltaTime, fps)=>{
+    GameLoop((millis, deltaTime, fps)=>{
         setMillis(millis);
         setDeltaTime(deltaTime);
         setFPS(Math.floor(fps));
@@ -80,7 +62,6 @@ function Game() {
         }
 
         if (gameRunning) {
-            musicSound.playAudio();
         
             // Background spawn
             if (backgrounds[0].getEntity().getPhysicsObject().getX() + SCREENWIDTH < 20) {
@@ -117,7 +98,20 @@ function Game() {
                 background.update();
             });
             if (bird.entity.collides(collidableList)) {
-                collisionSound.playAudio();
+                highscore = fileHandling.getData('highscore');
+
+                // If 'highscore' is not created in local storage, set current score to highscore
+                if(highscore == null){
+                    fileHandling.setData(score, 'highscore');
+                    highscore = score;
+                }
+
+                // If current score is higher than highscore in local storage, set current score to highscore
+                if(score > highscore){
+                    fileHandling.setData(score, 'highscore');
+                    highscore = score;
+                }
+                // COULD PLAY SOUND HERE WHEN HIT
                 gameRunning = false;
                 gameOver = true;
             }
@@ -167,6 +161,8 @@ function Game() {
                 Game Over
                 <br></br>
                 Score = {score > 0 ? score : 0}
+                <br></br>
+                Highscore = {highscore > 0 ? highscore : 0}
                 <br></br>
                 Press "ENTER" to restart
             </div>
