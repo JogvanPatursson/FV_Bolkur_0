@@ -7,6 +7,7 @@ import Pipe from './Pipe';
 import Ground from './Ground';
 import { KeyDown } from '../GameEngine/EventListener';
 import FileHandling from '../GameEngine/FileHandling';
+import AudioFile from '../GameEngine/AudioFile';
 
 // Constants
 
@@ -34,10 +35,23 @@ backgrounds.push(new GameBackground(nonCollidableList, SCREENWIDTH, 0, SCREENWID
 let currentMillis = 0;
 let prevMillis = 0;
 
+//========================================================
+// Audio files
+//========================================================
+
+// music
+let musicSound = new AudioFile("sounds/scifi.mp3", 1);
+musicSound.loopAudio();
+
+// sound effects
+let jumpSound = new AudioFile("sounds/jmp.mp3", 10);
+let collisionSound = new AudioFile("sounds/slap.mp3", 2);
+
 KeyDown('Space', event => { // Space pressed
     if (!gameOver) {
         gameRunning = true;
         bird.jump();
+        jumpSound.playAudio();
     }
 });
 
@@ -62,6 +76,7 @@ function Game() {
         }
 
         if (gameRunning) {
+            musicSound.playAudio();
         
             // Background spawn
             if (backgrounds[0].getEntity().getPhysicsObject().getX() + SCREENWIDTH < 20) {
@@ -111,7 +126,8 @@ function Game() {
                     fileHandling.setData(score, 'highscore');
                     highscore = score;
                 }
-                // COULD PLAY SOUND HERE WHEN HIT
+                
+                collisionSound.playAudio();
                 gameRunning = false;
                 gameOver = true;
             }
