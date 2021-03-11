@@ -8,7 +8,6 @@ import MathVector from './MathVector'
 
 export default class PhysicsComponent {
     private collisionObject : Collision;
-    private solid : boolean;
     private position : MathVector;
     private vspeed : number;
     private hspeed : number;
@@ -18,7 +17,6 @@ export default class PhysicsComponent {
 
     constructor(x = 0, y = 0, width = 0, height = 0) {
         this.collisionObject = new Collision(x, y, width, height);
-        this.solid = false;
         this.position = new MathVector(x, y);
         this.vspeed = 0;
         this.hspeed = 0;
@@ -47,10 +45,6 @@ export default class PhysicsComponent {
         return this.hspeed;
     }
 
-    public getDirection() : number {
-        return this.position.getAngle();
-    }
-
     public getGravity() : number {
         return this.gravity;
     }
@@ -61,10 +55,6 @@ export default class PhysicsComponent {
 
     public getGravityDirection() : number {
         return this.gravityDirection;
-    }
-
-    public getSolid() : boolean {
-        return this.solid;
     }
 
     public getCollisionObject() : Collision {
@@ -126,14 +116,6 @@ export default class PhysicsComponent {
         this.gravityDirection = direction;
     }
 
-    /*
-        setSolid
-        if the object is set to solid then other objects can't pass through it
-    */
-    public setSolid(solid : true) {
-        this.solid = solid;
-    }
-
     // **************************************************************************************************************************
     // PUBLIC METHODS
     // **************************************************************************************************************************
@@ -169,7 +151,7 @@ export default class PhysicsComponent {
         vec.createVectorFromTwoPoints(this.position.getX(), this.position.getY(), x, y);
         vec.normalize();
         vec.scalarMultiplication(force);
-        this.moveToFreeSpace(vec);
+        this.position.add(vec);
     }
 
     /*
@@ -181,19 +163,7 @@ export default class PhysicsComponent {
     public applyDirectionalForce(direction : number, force : number) {
         const directionVector = new MathVector;
         directionVector.createDirectionalVector(direction, force);
-        this.moveToFreeSpace(directionVector);
-    }
-
-    /*
-        setGravityDirectionTowardsPoint
-        Sets the direction of gravity towards a point
-        @param x : x position of point to gravitate towards
-        @param y : y position of point to gravitate towards
-    */
-    public setGravityDirectionTowardsPoint(x : number, y : number) {
-        const vec = new MathVector;
-        vec.createVectorFromTwoPoints(this.position.getX(), this.position.getY(), x, y);
-        this.gravityDirection = vec.getAngle();
+        this.position.add(directionVector);
     }
 
     // **************************************************************************************************************************
@@ -201,12 +171,8 @@ export default class PhysicsComponent {
     // **************************************************************************************************************************
 
     private updateGravity() {
-        this.currentGravity.setY(this.currentGravity.getY() + this.gravity);
-        this.moveToFreeSpace(this.currentGravity);
-    }
-
-    private moveToFreeSpace(vec : MathVector) {
-        this.position.add(vec);
+        this.currentGravity.createDirectionalVector(this.gravityDirection, this.currentGravity.length() + this.gravity);
+        this.position.add(this.currentGravity);
     }
 
 }
