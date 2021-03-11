@@ -1,12 +1,10 @@
 import FlappyBird from './GameAssets/flappy-bird.png';
 import Entity from '../GameEngine/Entity';
 import EntityList from '../GameEngine/EntityList';
-import AudioFile from '../GameEngine/AudioFile';
 
 
 class TheBird {
     entity : Entity;
-    jumpSound = new AudioFile("sounds/jmp.mp3");
     
     constructor(entityList : EntityList) {
         this.entity = new Entity(entityList.length(), FlappyBird, 0, 100, 40, 30);
@@ -19,7 +17,6 @@ class TheBird {
     jump() {
         this.entity.getPhysicsObject().setGravity(0);
         this.entity.getPhysicsObject().setVspeed(-10);
-        this.jumpSound.playAudio();
     }
 
     update() {

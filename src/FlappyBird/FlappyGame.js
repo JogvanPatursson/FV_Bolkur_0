@@ -5,6 +5,7 @@ import TheBird from './TheBird'
 import GameBackground from './GameBackground';
 import Pipe from './Pipe';
 import Ground from './Ground';
+import AudioFile from '../GameEngine/AudioFile';
 
 // Constants
 
@@ -30,6 +31,18 @@ backgrounds.push(new GameBackground(nonCollidableList, SCREENWIDTH, 0, SCREENWID
 let currentMillis = 0;
 let prevMillis = 0;
 
+//========================================================
+// Audio files
+//========================================================
+
+// music
+let musicSound = new AudioFile("sounds/scifi.mp3", 1);
+musicSound.loopAudio();
+
+// sound effects
+let jumpSound = new AudioFile("sounds/jmp.mp3", 10);
+let collisionSound = new AudioFile("sounds/slap.mp3", 2);
+
 window.addEventListener("keydown", event => {
     event.preventDefault();
     // SPACE IS PRESSED
@@ -38,6 +51,7 @@ window.addEventListener("keydown", event => {
         if (!gameOver) {
             gameRunning = true;
             bird.jump();
+            jumpSound.playAudio();
         }
 
         return;
@@ -66,6 +80,7 @@ function Game() {
         }
 
         if (gameRunning) {
+            musicSound.playAudio();
         
             // Background spawn
             if (backgrounds[0].getEntity().getPhysicsObject().getX() + SCREENWIDTH < 20) {
@@ -102,6 +117,7 @@ function Game() {
                 background.update();
             });
             if (bird.entity.collides(collidableList)) {
+                collisionSound.playAudio();
                 gameRunning = false;
                 gameOver = true;
             }
