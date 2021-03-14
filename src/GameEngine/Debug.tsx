@@ -9,7 +9,6 @@
 
 class Debug {
 
-    
     private message:string;
     private value:any;
 
@@ -28,7 +27,11 @@ class Debug {
         return this.value;
     }
 
-    public print() : void {
+    public setValue(val:any) : void {
+        this.value = val;
+    }
+
+    public printToLog() : void {
         console.log(this.message + " : " + this.value);
     }
 }
