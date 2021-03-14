@@ -1,14 +1,13 @@
 /*
-*   File    :   AudioFile.tsx
-*   Author  :   Harald í Kálvalíð 
-*   Purpose :   This class is for playing audio such as music and sound effects
-*               in the game engine. It takes two arguments for construction.
-*               It needs an audio filename and a number. The audio filename should
-*               include a path for the audio file (which should be public) and the
-*               number (copies) represents how many copies of an audio sample it should
-*               make. In short, this class grants you the ability to play audio and loop it.
-*               Wether an audio file is a sound effect or music takes place during
-*               construction of the object.
+File    :   AudioFile.tsx
+Purpose :   This class is for playing audio such as music and sound effects
+            in the game engine. It takes two arguments for construction.
+            It needs an audio filename and a number. The audio filename should
+            include a path for the audio file (which should be public) and the
+            number (copies) represents how many copies of an audio sample it should
+            make. In short, this class grants you the ability to play audio and loop it.
+            Wether an audio file is a sound effect or music takes place during
+            construction of the object.
 */
 
 export default class AudioFile {
@@ -16,6 +15,7 @@ export default class AudioFile {
     //========================================================
     // Variables
     //========================================================
+
     private x:number = 0;
     private zero:number = 0;
     private sound:any;                      // the actual sound we are going to play
@@ -24,16 +24,19 @@ export default class AudioFile {
     private count : number = 0;             // a counter to point at the next element in the array
     private isMusic : boolean = false;
     private soundEffect:any;
+    private filename:string;
 
 
     //========================================================
     // constructor
     //========================================================
-    constructor(filename:string, copies:number) {
-        // creating the audio file
-        this.sound = new Audio(filename)
 
-        // error handeling of the input value
+    constructor(file:string, copies:number) {
+        this.filename = file;
+        // creating the audio file
+        this.sound = new Audio(file)
+
+        // error handeling and limits of the input value
         // this can be changed at will.
         if (copies < 1) {
             copies = 1;
@@ -46,20 +49,39 @@ export default class AudioFile {
         // if there is only one copy of the audio file then it means that it's music.
         // it will only create one sound to be played instead of an array of audio copies
         if (copies == 1) {
-            this.sound = new Audio(filename);
+            this.sound = new Audio(file);
             this.isMusic = true;
         } else {
             // a for loop to make multiple copies of the audio file
             // and put it in the soundArray
             for (this.x = this.zero; this.x < copies; this.x++) {
-                this.soundArray.push(new Audio(filename));
+                this.soundArray.push(new Audio(file));
             }
 
             this.arraySize = this.soundArray.length; 
 
         }
     }
+    
+    //========================================================
+    // get functions (primarily to be used for unit testing)
+    //========================================================
 
+    public getIsMusic() : boolean {
+        return this.isMusic;
+    }
+
+    public getCount() : number {
+        return this.count;
+    }
+
+    public getArraySize() : number {
+        return this.arraySize;
+    }
+
+    public getFilename() : string {
+        return this.filename;
+    }
 
     //========================================================
     // member functions
